@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Fitness Studio</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Custom styles for animations and specific elements */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #0a0a0a; /* Very dark background */
+            color: #e0e0e0; /* Light grey text */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .text-neon-green {
+            color: #32CD32; /* Lime Green */
+        }
+        .bg-neon-green {
+            background-color: #32CD32; /* Lime Green */
+        }
+        .border-neon-green {
+            border-color: #32CD32; /* Lime Green */
+        }
+        .hover\:bg-neon-green-dark:hover {
+            background-color: #28a745; /* Slightly darker green on hover */
+        }
+        .sticky-header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: rgba(10, 10, 10, 0.95); /* Slightly transparent dark background */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .section-padding {
+            padding: 4rem 1rem; /* Responsive padding for sections */
+        }
+        @media (min-width: 768px) {
+            .section-padding {
+                padding: 6rem 2rem;
+            }
+        }
+        @media (min-width: 1024px) {
+            .section-padding {
+                padding: 8rem 4rem;
+            }
+        }
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in.appear {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1001; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.8); /* Black w/ opacity */
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: #1a1a1a;
+            margin: auto;
+            padding: 2.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+            max-width: 90%;
+            width: 500px;
+            position: relative;
+            animation: slideIn 0.4s ease-out;
+        }
+        .close-button {
+            color: #aaa;
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: #32CD32;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        /* Custom scrollbar for aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #32CD32;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #28a745;
+        }
+        .loading-spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #32CD32;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 8px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-950 text-gray-100">
+
+    <!-- Header -->
+    <header id="header" class="py-4 transition-all duration-300 ease-in-out">
+        <nav class="container mx-auto flex justify-between items-center px-4 md:px-8">
+            <div class="text-2xl font-bold text-neon-green">Premium Fitness</div>
+            <ul class="hidden md:flex space-x-6">
+                <li><a href="#hero" class="hover:text-neon-green transition duration-300">Home</a></li>
+                <li><a href="#services" class="hover:text-neon-green transition duration-300">Services</a></li>
+                <li><a href="#why-us" class="hover:text-neon-green transition duration-300">Why Us</a></li>
+                <li><a href="#testimonials" class="hover:text-neon-green transition duration-300">Testimonials</a></li>
+                <li><a href="#gallery" class="hover:text-neon-green transition duration-300">Gallery</a></li>
+                <li><a href="#pricing" class="hover:text-neon-green transition duration-300">Pricing</a></li>
+                <li><a href="#contact" class="hover:text-neon-green transition duration-300">Contact</a></li>
+                <li><a href="#blog" class="hover:text-neon-green transition duration-300">Blog</a></li>
+            </ul>
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-gray-100 focus:outline-none">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </nav>
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu" class="hidden md:hidden fixed inset-0 bg-gray-950 bg-opacity-95 z-50 flex flex-col items-center justify-center">
+            <button id="close-mobile-menu" class="absolute top-6 right-6 text-gray-100 focus:outline-none">
+                <i class="fas fa-times text-3xl"></i>
+                </button>
+            <ul class="text-3xl space-y-8 text-center">
+                <li><a href="#hero" class="block py-2 hover:text-neon-green transition duration-300" onclick="closeMobileMenu()">Home</a></li>
+                <li><a href="#services" class="block py-2 hover:text-neon-green transition duration-300" onclick="closeMobileMenu()">Services</a></li>
+                <li><a href="#why-us" class="block py-2 hover:text-neon-green transition duration-300" onclick="closeMobileMenu()">Why Us</a></li>
+                <li><a href="#testimonials" class="block py-2 hover:text-neon-green transition duration-300" onclick="closeMobileMenu()">Testimonials</a></li>
+                <li><a href="#gallery" class="block py-2 hover:text-neon-green transition duration-300" onclick="closeMobileMenu()">Gallery</a></li>
+                <li><a href="#pricing" class="block py-2 hover:text-neon-green transition duration-300" onclick="closeMobileMenu()">Pricing</a></li>
+                <li><a href="#contact" class="block py-2 hover:text-neon-green transition duration-300" onclick="closeMobileMenu()">Contact</a></li>
+                <li><a href="#blog" class="block py-2 hover:text-neon-green transition duration-300" onclick="closeMobileMenu()">Blog</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="hero" class="relative bg-cover bg-center h-screen flex items-center justify-center text-center px-4"
+            style="background-image: url('https://placehold.co/1920x1080/1a1a1a/32CD32?text=Premium+Fitness+Studio');">
+            <div class="absolute inset-0 bg-black opacity-70"></div>
+            <div class="relative z-10 fade-in">
+                <h1 class="text-4xl md:text-6xl font-extrabold leading-tight text-white mb-4">Train Smart. Feel Strong. Look Elite.</h1>
+                <p class="text-lg md:text-xl text-gray-300 mb-8">Premium training experience for all fitness levels.</p>
+                <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                    <a href="#booking-form" class="bg-neon-green text-gray-900 font-bold py-3 px-8 rounded-full shadow-lg hover:bg-neon-green-dark transition duration-300 transform hover:scale-105">Book Free Trial</a>
+                    <a href="#pricing" class="border-2 border-neon-green text-neon-green font-bold py-3 px-8 rounded-full shadow-lg hover:bg-neon-green hover:text-gray-900 transition duration-300 transform hover:scale-105">Explore Programs</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="section-padding bg-gray-900 fade-in">
+            <div class="container mx-auto text-center">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-12">Our Services</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="bg-gray-800 p-8 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 border border-transparent hover:border-neon-green">
+                        <i class="fas fa-dumbbell text-5xl text-neon-green mb-4"></i>
+                        <h3 class="text-xl font-semibold text-white mb-2">Personal Training</h3>
+                        <p class="text-gray-300">Tailored workouts with certified coaches to help you achieve your goals faster.</p>
+                    </div>
+                    <div class="bg-gray-800 p-8 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 border border-transparent hover:border-neon-green">
+                        <i class="fas fa-users text-5xl text-neon-green mb-4"></i>
+                        <h3 class="text-xl font-semibold text-white mb-2">Group Classes</h3>
+                        <p class="text-gray-300">Energizing group sessions for all levels, from HIIT to Yoga and Spin.</p>
+                    </div>
+                    <div class="bg-gray-800 p-8 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 border border-transparent hover:border-neon-green">
+                        <i class="fas fa-apple-alt text-5xl text-neon-green mb-4"></i>
+                        <h3 class="text-xl font-semibold text-white mb-2">Nutrition Guidance</h3>
+                        <p class="text-gray-300 mb-4">Expert advice and personalized meal plans to fuel your fitness journey.</p>
+                        <button onclick="openMealPlanModal()" class="bg-neon-green text-gray-900 font-bold py-2 px-6 rounded-full shadow-lg hover:bg-neon-green-dark transition duration-300 text-sm mt-4">Get a Sample Meal Plan ✨</button>
+                    </div>
+                    <div class="bg-gray-800 p-8 rounded-xl shadow-lg transform hover:scale-105 transition duration-300 border border-transparent hover:border-neon-green">
+                        <i class="fas fa-clock text-5xl text-neon-green mb-4"></i>
+                        <h3 class="text-xl font-semibold text-white mb-2">24/7 Access</h3>
+                        <p class="text-gray-300">Workout whenever it suits your schedule with round-the-clock access.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why Us Section -->
+        <section id="why-us" class="section-padding bg-gray-950 fade-in">
+            <div class="container mx-auto text-center">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-12">Why Choose Premium Fitness?</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-gray-900 p-8 rounded-xl shadow-lg border-b-4 border-neon-green">
+                        <i class="fas fa-award text-5xl text-neon-green mb-4"></i>
+                        <h3 class="text-xl font-semibold text-white mb-2">Certified Trainers</h3>
+                        <p class="text-gray-300">Our team of experienced and certified professionals are dedicated to your success.</p>
+                    </div>
+                    <div class="bg-gray-900 p-8 rounded-xl shadow-lg border-b-4 border-neon-green">
+                        <i class="fas fa-pump-soap text-5xl text-neon-green mb-4"></i>
+                        <h3 class="text-xl font-semibold text-white mb-2">Clean Equipment</h3>
+                        <p class="text-gray-300">State-of-the-art equipment maintained to the highest standards of cleanliness.</p>
+                    </div>
+                    <div class="bg-gray-900 p-8 rounded-xl shadow-lg border-b-4 border-neon-green">
+                        <i class="fas fa-clipboard-list text-5xl text-neon-green mb-4"></i>
+                        <h3 class="text-xl font-semibold text-white mb-2">Tailored Plans</h3>
+                        <p class="text-gray-300">Personalized fitness and nutrition plans designed to fit your unique needs.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section id="testimonials" class="section-padding bg-gray-900 fade-in">
+            <div class="container mx-auto text-center">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-12">What Our Members Say</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700">
+                        <div class="flex items-center justify-center mb-4">
+                            <img src="https://placehold.co/80x80/32CD32/FFFFFF?text=JD" alt="John Doe" class="w-20 h-20 rounded-full object-cover border-4 border-neon-green mr-4" onerror="this.onerror=null;this.src='https://placehold.co/80x80/32CD32/FFFFFF?text=User';">
+                            <div>
+                                <p class="text-xl font-semibold text-white">John D.</p>
+                                <div class="text-yellow-400">
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-300 italic">"Premium Fitness has transformed my life! The trainers are amazing and the facilities are top-notch."</p>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700">
+                        <div class="flex items-center justify-center mb-4">
+                            <img src="https://placehold.co/80x80/32CD32/FFFFFF?text=JS" alt="Jane Smith" class="w-20 h-20 rounded-full object-cover border-4 border-neon-green mr-4" onerror="this.onerror=null;this.src='https://placehold.co/80x80/32CD32/FFFFFF?text=User';">
+                            <div>
+                                <p class="text-xl font-semibold text-white">Jane S.</p>
+                                <div class="text-yellow-400">
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-300 italic">"The group classes are so motivating, and the 24/7 access is incredibly convenient. Highly recommend!"</p>
+                    </div>
+                    <div class="bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700">
+                        <div class="flex items-center justify-center mb-4">
+                            <img src="https://placehold.co/80x80/32CD32/FFFFFF?text=MA" alt="Mike Adams" class="w-20 h-20 rounded-full object-cover border-4 border-neon-green mr-4" onerror="this.onerror=null;this.src='https://placehold.co/80x80/32CD32/FFFFFF?text=User';">
+                            <div>
+                                <p class="text-xl font-semibold text-white">Mike A.</p>
+                                <div class="text-yellow-400">
+                                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-300 italic">"I've seen incredible results thanks to their nutrition guidance and personalized plans. Best gym ever!"</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section id="gallery" class="section-padding bg-gray-950 fade-in">
+            <div class="container mx-auto text-center">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-12">Our Vibe</h2>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <img src="https://placehold.co/600x400/1a1a1a/32CD32?text=Gym+Vibe+1" alt="Gym Vibe 1" class="w-full h-auto rounded-lg shadow-md transform hover:scale-105 transition duration-300 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/1a1a1a/32CD32?text=Image';">
+                    <img src="https://placehold.co/600x400/1a1a1a/32CD32?text=Gym+Vibe+2" alt="Gym Vibe 2" class="w-full h-auto rounded-lg shadow-md transform hover:scale-105 transition duration-300 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/1a1a1a/32CD32?text=Image';">
+                    <img src="https://placehold.co/600x400/1a1a1a/32CD32?text=Gym+Vibe+3" alt="Gym Vibe 3" class="w-full h-auto rounded-lg shadow-md transform hover:scale-105 transition duration-300 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/1a1a1a/32CD32?text=Image';">
+                    <img src="https://placehold.co/600x400/1a1a1a/32CD32?text=Gym+Vibe+4" alt="Gym Vibe 4" class="w-full h-auto rounded-lg shadow-md transform hover:scale-105 transition duration-300 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/1a1a1a/32CD32?text=Image';">
+                    <img src="https://placehold.co/600x400/1a1a1a/32CD32?text=Gym+Vibe+5" alt="Gym Vibe 5" class="w-full h-auto rounded-lg shadow-md transform hover:scale-105 transition duration-300 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/1a1a1a/32CD32?text=Image';">
+                    <img src="https://placehold.co/600x400/1a1a1a/32CD32?text=Gym+Vibe+6" alt="Gym Vibe 6" class="w-full h-auto rounded-lg shadow-md transform hover:scale-105 transition duration-300 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/1a1a1a/32CD32?text=Image';">
+                    <img src="https://placehold.co/600x400/1a1a1a/32CD32?text=Gym+Vibe+7" alt="Gym Vibe 7" class="w-full h-auto rounded-lg shadow-md transform hover:scale-105 transition duration-300 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/1a1a1a/32CD32?text=Image';">
+                    <img src="https://placehold.co/600x400/1a1a1a/32CD32?text=Gym+Vibe+8" alt="Gym Vibe 8" class="w-full h-auto rounded-lg shadow-md transform hover:scale-105 transition duration-300 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/1a1a1a/32CD32?text=Image';">
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Plans Section -->
+        <section id="pricing" class="section-padding bg-gray-900 fade-in">
+            <div class="container mx-auto text-center">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-12">Our Flexible Pricing Plans</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Basic Plan -->
+                    <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 transform hover:scale-105 transition duration-300">
+                        <h3 class="text-2xl font-bold text-white mb-4">Basic</h3>
+                        <p class="text-neon-green text-4xl font-extrabold mb-6">$39<span class="text-xl text-gray-400">/month</span></p>
+                        <ul class="text-gray-300 text-left mb-8 space-y-3">
+                            <li class="flex items-center"><i class="fas fa-check-circle text-neon-green mr-3"></i>Gym Access (Mon-Fri)</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-neon-green mr-3"></i>Standard Group Classes</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-neon-green mr-3"></i>Basic Equipment Usage</li>
+                            <li class="flex items-center opacity-50"><i class="fas fa-times-circle text-gray-500 mr-3"></i>Personal Training</li>
+                            <li class="flex items-center opacity-50"><i class="fas fa-times-circle text-gray-500 mr-3"></i>Nutrition Guidance</li>
+                        </ul>
+                        <button class="bg-neon-green text-gray-900 font-bold py-3 px-8 rounded-full shadow-lg hover:bg-neon-green-dark transition duration-300 w-full">Join Now</button>
+                    </div>
+
+                    <!-- Pro Plan -->
+                    <div class="bg-gray-800 p-8 rounded-xl shadow-lg border-2 border-neon-green transform scale-105 transition duration-300 relative">
+                        <span class="absolute -top-4 left-1/2 -translate-x-1/2 bg-neon-green text-gray-900 text-xs font-bold px-4 py-1 rounded-full uppercase">Most Popular</span>
+                        <h3 class="text-2xl font-bold text-white mb-4">Pro</h3>
+                        <p class="text-neon-green text-4xl font-extrabold mb-6">$69<span class="text-xl text-gray-400">/month</span></p>
+                        <ul class="text-gray-300 text-left mb-8 space-y-3">
+                            <li class="flex items-center"><i class="fas fa-check-circle text-neon-green mr-3"></i>24/7 Gym Access</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-neon-green mr-3"></i>All Group Classes</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-neon-green mr-3"></i>Advanced Equipment</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-neon-green mr-3"></i>2 PT Sessions/Month</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-neon-green mr-3"></i>Basic Nutrition Plan</li>
+                        </ul>
+                        <button class="bg-neon-green text-gray-900 font-bold py-3 px-8 rounded-full shadow-lg hover:bg-neon-green-dark transition duration-300 w-full">Join Now</button>
+                    </div>
+
+                    <!-- Elite Plan -->
+                    <div class="bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700 transform hover:scale-105 transition duration-300">
+                        <h3 class="text-2xl font-bold text-white mb-4">Elite</h3>
+                        <p class="text-neon-green text-4xl font-extrabold mb-6">$99<span class="text-xl text-gray-400">/month</span></p>
+                        <ul class="text-gray-300 text-left mb-8 space-y-3">
+                            <li class="flex items-center"><i class="fas fa-check-circle text-neon-green mr-3"></i>24/7 Gym Access</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-neon-green mr-3"></i>All Group Classes + VIP</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-neon-green mr-3"></i>Premium Equipment</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-neon-green mr-3"></i>Unlimited PT Sessions</li>
+                            <li class="flex items-center"><i class="fas fa-check-circle text-neon-green mr-3"></i>Personalized Nutrition</li>
+                        </ul>
+                        <button class="bg-neon-green text-gray-900 font-bold py-3 px-8 rounded-full shadow-lg hover:bg-neon-green-dark transition duration-300 w-full">Join Now</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action Section -->
+        <section class="relative bg-cover bg-center py-20 px-4 text-center fade-in"
+            style="background-image: url('https://placehold.co/1920x400/1a1a1a/32CD32?text=Ready+to+Transform%3F');">
+            <div class="absolute inset-0 bg-black opacity-70"></div>
+            <div class="relative z-10">
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">Ready to Transform?</h2>
+                <p class="text-lg md:text-xl text-gray-300 mb-8">Join Premium Fitness Studio today and start your journey to a stronger, healthier you.</p>
+                <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                    <a href="#booking-form" class="bg-neon-green text-gray-900 font-bold py-3 px-8 rounded-full shadow-lg hover:bg-neon-green-dark transition duration-300 transform hover:scale-105">Book Free Trial</a>
+                    <a href="#contact" class="border-2 border-neon-green text-neon-green font-bold py-3 px-8 rounded-full shadow-lg hover:bg-neon-green hover:text-gray-900 transition duration-300 transform hover:scale-105">Contact Us</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Booking Form Section -->
+        <section id="booking-form" class="section-padding bg-gray-900 fade-in">
+            <div class="container mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold text-white text-center mb-12">Book Your Session</h2>
+                <form class="max-w-xl mx-auto bg-gray-800 p-8 rounded-xl shadow-lg border border-gray-700">
+                    <div class="mb-6">
+                        <label for="name" class="block text-gray-300 text-lg font-semibold mb-2">Name</label>
+                        <input type="text" id="name" name="name" class="w-full p-3 rounded-md bg-gray-700 border border-gray-600 text-white focus:border-neon-green focus:ring focus:ring-neon-green focus:ring-opacity-50" placeholder="Your Name" required>
+                    </div>
+                    <div class="mb-6">
+                        <label for="phone" class="block text-gray-300 text-lg font-semibold mb-2">Phone</label>
+                        <input type="tel" id="phone" name="phone" class="w-full p-3 rounded-md bg-gray-700 border border-gray-600 text-white focus:border-neon-green focus:ring focus:ring-neon-green focus:ring-opacity-50" placeholder="Your Phone Number" required>
+                    </div>
+                    <div class="mb-6">
+                        <label for="service" class="block text-gray-300 text-lg font-semibold mb-2">Service Type</label>
+                        <select id="service" name="service" class="w-full p-3 rounded-md bg-gray-700 border border-gray-600 text-white focus:border-neon-green focus:ring focus:ring-neon-green focus:ring-opacity-50" required>
+                            <option value="">Select a Service</option>
+                            <option value="personal-training">Personal Training</option>
+                            <option value="group-class">Group Class</option>
+                            <option value="free-trial">Free Trial</option>
+                        </select>
+                    </div>
+                    <div class="mb-6">
+                        <label for="date" class="block text-gray-300 text-lg font-semibold mb-2">Preferred Date</label>
+                        <input type="date" id="date" name="date" class="w-full p-3 rounded-md bg-gray-700 border border-gray-600 text-white focus:border-neon-green focus:ring focus:ring-neon-green focus:ring-opacity-50" required>
+                    </div>
+                    <div class="mb-6">
+                        <label for="time" class="block text-gray-300 text-lg font-semibold mb-2">Preferred Time</label>
+                        <input type="time" id="time" name="time" class="w-full p-3 rounded-md bg-gray-700 border border-gray-600 text-white focus:border-neon-green focus:ring focus:ring-neon-green focus:ring-opacity-50" required>
+                    </div>
+                    <button type="submit" class="bg-neon-green text-gray-900 font-bold py-3 px-8 rounded-full shadow-lg hover:bg-neon-green-dark transition duration-300 w-full transform hover:scale-105">Submit Booking</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Blog Section -->
+        <section id="blog" class="section-padding bg-gray-950 fade-in">
+            <div class="container mx-auto text-center">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-12">Latest from Our Blog</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Blog Post 1 -->
+                    <div class="bg-gray-900 rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition duration-300 border border-gray-800">
+                        <img src="https://placehold.co/600x350/1a1a1a/32CD32?text=Fitness+Tips" alt="Fitness Tips" class="w-full h-48 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x350/1a1a1a/32CD32?text=Image';">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold text-white mb-2">5 Essential Fitness Tips for Beginners</h3>
+                            <p class="text-gray-400 text-sm mb-4">By Admin | July 10, 2025</p>
+                            <p class="text-gray-300 mb-4">Starting your fitness journey? Here are five crucial tips to help you build a strong foundation and stay motivated.</p>
+                            <a href="#" class="text-neon-green hover:underline font-semibold">Read More <i class="fas fa-arrow-right ml-1"></i></a>
+                        </div>
+                    </div>
+                    <!-- Blog Post 2 -->
+                    <div class="bg-gray-900 rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition duration-300 border border-gray-800">
+                        <img src="https://placehold.co/600x350/1a1a1a/32CD32?text=Healthy+Recipes" alt="Healthy Recipes" class="w-full h-48 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x350/1a1a1a/32CD32?text=Image';">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold text-white mb-2">Quick & Healthy Post-Workout Recipes</h3>
+                            <p class="text-gray-400 text-sm mb-4">By Admin | July 05, 2025</p>
+                            <p class="text-gray-300 mb-4">Fuel your body right after your workout with these easy-to-make and delicious recipes.</p>
+                            <a href="#" class="text-neon-green hover:underline font-semibold">Read More <i class="fas fa-arrow-right ml-1"></i></a>
+                        </div>
+                    </div>
+                    <!-- Blog Post 3 -->
+                    <div class="bg-gray-900 rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition duration-300 border border-gray-800">
+                        <img src="https://placehold.co/600x350/1a1a1a/32CD32?text=Success+Story" alt="Success Story" class="w-full h-48 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x350/1a1a1a/32CD32?text=Image';">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold text-white mb-2">From Couch to Marathon: Sarah's Journey</h3>
+                            <p class="text-gray-400 text-sm mb-4">By Admin | June 28, 2025</p>
+                            <p class="text-gray-300 mb-4">Read Sarah's inspiring story of how she transformed her life with Premium Fitness Studio.</p>
+                            <a href="#" class="text-neon-green hover:underline font-semibold">Read More <i class="fas fa-arrow-right ml-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="section-padding bg-gray-900 fade-in">
+            <div class="container mx-auto text-center">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-12">Get in Touch</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div class="text-left">
+                        <p class="text-gray-300 text-lg mb-4"><i class="fas fa-map-marker-alt text-neon-green mr-3"></i>123 Fitness Ave, Gym City, GC 12345</p>
+                        <p class="text-gray-300 text-lg mb-4"><i class="fas fa-envelope text-neon-green mr-3"></i>info@premiumfitness.com</p>
+                        <p class="text-300 text-lg mb-6"><i class="fas fa-phone text-neon-green mr-3"></i>+1 (555) 123-4567</p>
+                        <div class="flex space-x-6 justify-center md:justify-start">
+                            <a href="#" class="text-gray-300 hover:text-neon-green transition duration-300 text-3xl"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="text-gray-300 hover:text-neon-green transition duration-300 text-3xl"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="text-gray-300 hover:text-neon-green transition duration-300 text-3xl"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="text-gray-300 hover:text-neon-green transition duration-300 text-3xl"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                    <div class="w-full h-64 md:h-96 bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+                        <!-- Google Maps Placeholder -->
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.2500000000005!2d-122.0842499!3d37.4219999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzdEMjEnMzYuMCJOIDEyMkQyNScwMy4wIlc!5e0!3m2!1sen!2sus!4v1678901234567!5m2!1sen!2sus"
+                            width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-950 py-8 text-center text-gray-400">
+        <div class="container mx-auto px-4">
+            <p>&copy; 2025 Premium Fitness Studio. All rights reserved.</p>
+            <p class="mt-2">Designed with <i class="fas fa-heart text-neon-green"></i> by Your Name</p>
+        </div>
+    </footer>
+
+    <!-- Pop-Up Modal -->
+    <div id="free-pass-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal()">&times;</span>
+            <h3 class="text-3xl font-bold text-white mb-4 text-center">Claim Your Free Day Pass!</h3>
+            <p class="text-gray-300 text-center mb-6">Experience Premium Fitness Studio for a day, on us.</p>
+            <form>
+                <div class="mb-4">
+                    <label for="modal-name" class="sr-only">Name</label>
+                    <input type="text" id="modal-name" name="name" class="w-full p-3 rounded-md bg-gray-700 border border-gray-600 text-white focus:border-neon-green focus:ring focus:ring-neon-green focus:ring-opacity-50" placeholder="Your Name" required>
+                </div>
+                <div class="mb-4">
+                    <label for="modal-email" class="sr-only">Email</label>
+                    <input type="email" id="modal-email" name="email" class="w-full p-3 rounded-md bg-gray-700 border border-gray-600 text-white focus:border-neon-green focus:ring focus:ring-neon-green focus:ring-opacity-50" placeholder="Your Email" required>
+                </div>
+                <div class="mb-6">
+                    <label for="modal-phone" class="sr-only">Phone</label>
+                    <input type="tel" id="modal-phone" name="phone" class="w-full p-3 rounded-md bg-gray-700 border border-gray-600 text-white focus:border-neon-green focus:ring focus:ring-neon-green focus:ring-opacity-50" placeholder="Your Phone Number (Optional)">
+                </div>
+                <button type="submit" class="bg-neon-green text-gray-900 font-bold py-3 px-8 rounded-full shadow-lg hover:bg-neon-green-dark transition duration-300 w-full transform hover:scale-105">Get My Pass</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Meal Plan Generator Modal -->
+    <div id="meal-plan-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeMealPlanModal()">&times;</span>
+            <h3 class="text-3xl font-bold text-white mb-4 text-center">Generate Your Sample Meal Plan ✨</h3>
+            <p class="text-gray-300 text-center mb-6">Tell us your preferences to get a personalized meal plan suggestion.</p>
+            <form id="meal-plan-form">
+                <div class="mb-4">
+                    <label for="dietary-restrictions" class="block text-gray-300 text-lg font-semibold mb-2">Dietary Restrictions (e.g., Vegetarian, Gluten-Free)</label>
+                    <input type="text" id="dietary-restrictions" name="dietary-restrictions" class="w-full p-3 rounded-md bg-gray-700 border border-gray-600 text-white focus:border-neon-green focus:ring focus:ring-neon-green focus:ring-opacity-50" placeholder="e.g., Vegan, Nut Allergy">
+                </div>
+                <div class="mb-4">
+                    <label for="fitness-goal" class="block text-gray-300 text-lg font-semibold mb-2">Fitness Goal (e.g., Weight Loss, Muscle Gain)</label>
+                    <input type="text" id="fitness-goal" name="fitness-goal" class="w-full p-3 rounded-md bg-gray-700 border border-gray-600 text-white focus:border-neon-green focus:ring focus:ring-neon-green focus:ring-opacity-50" placeholder="e.g., Muscle Gain, Endurance">
+                </div>
+                <div class="mb-6">
+                    <label for="cuisine-preference" class="block text-gray-300 text-lg font-semibold mb-2">Cuisine Preference (Optional)</label>
+                    <input type="text" id="cuisine-preference" name="cuisine-preference" class="w-full p-3 rounded-md bg-gray-700 border border-gray-600 text-white focus:border-neon-green focus:ring focus:ring-neon-green focus:ring-opacity-50" placeholder="e.g., Mediterranean, Asian">
+                </div>
+                <button type="submit" id="generate-meal-plan-button" class="bg-neon-green text-gray-900 font-bold py-3 px-8 rounded-full shadow-lg hover:bg-neon-green-dark transition duration-300 w-full transform hover:scale-105 flex items-center justify-center">
+                    Generate Plan
+                    <span id="meal-plan-spinner" class="loading-spinner hidden"></span>
+                </button>
+            </form>
+            <div id="meal-plan-result" class="mt-8 p-6 bg-gray-700 rounded-lg hidden">
+                <h4 class="text-xl font-semibold text-white mb-4">Your Personalized Meal Plan:</h4>
+                <div id="meal-plan-content" class="text-gray-200 whitespace-pre-wrap"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Sticky Header
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) { // Adjust scroll threshold as needed
+                header.classList.add('sticky-header');
+            } else {
+                header.classList.remove('sticky-header');
+            }
+        });
+
+        // Mobile Menu Toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const closeMobileMenuButton = document.getElementById('close-mobile-menu');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling when menu is open
+        });
+
+        closeMobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+            document.body.style.overflow = ''; // Restore scrolling
+        });
+
+        function closeMobileMenu() {
+            mobileMenu.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        // Pop-up Modal Logic (Free Pass)
+        const freePassModal = document.getElementById('free-pass-modal');
+        let hasScrolledEnough = false; // Flag to ensure modal only pops once on scroll
+
+        function showModal() {
+            freePassModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
+        }
+
+        function closeModal() {
+            freePassModal.style.display = 'none';
+            document.body.style.overflow = ''; // Restore scrolling
+        }
+
+        // Show modal on scroll after a certain percentage of the page
+        window.addEventListener('scroll', () => {
+            const scrollPercentage = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            if (scrollPercentage > 20 && !hasScrolledEnough) { // Show after 20% scroll
+                showModal();
+                hasScrolledEnough = true; // Set flag to true to prevent repeated pop-ups
+            }
+        });
+
+        // Close modal if clicked outside content
+        window.addEventListener('click', (event) => {
+            if (event.target == freePassModal) {
+                closeModal();
+            }
+        });
+
+        // Fade-in animation on scroll for sections
+        const faders = document.querySelectorAll('.fade-in');
+        const appearOptions = {
+            threshold: 0.2, // When 20% of the element is visible
+            rootMargin: "0px 0px -50px 0px" // Adjust margin to trigger earlier/later
+        };
+
+        const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) {
+                    return;
+                } else {
+                    entry.target.classList.add('appear');
+                    appearOnScroll.unobserve(entry.target); // Stop observing once it appears
+                }
+            });
+        }, appearOptions);
+
+        faders.forEach(fader => {
+            appearOnScroll.observe(fader);
+        });
+
+        // Meal Plan Generator Modal Logic
+        const mealPlanModal = document.getElementById('meal-plan-modal');
+        const mealPlanForm = document.getElementById('meal-plan-form');
+        const mealPlanResult = document.getElementById('meal-plan-result');
+        const mealPlanContent = document.getElementById('meal-plan-content');
+        const generateMealPlanButton = document.getElementById('generate-meal-plan-button');
+        const mealPlanSpinner = document.getElementById('meal-plan-spinner');
+
+        function openMealPlanModal() {
+            mealPlanModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+            // Reset form and result when opening
+            mealPlanForm.reset();
+            mealPlanResult.classList.add('hidden');
+            mealPlanContent.textContent = '';
+        }
+
+        function closeMealPlanModal() {
+            mealPlanModal.style.display = 'none';
+            document.body.style.overflow = ''; // Restore scrolling
+        }
+
+        // Close meal plan modal if clicked outside content
+        mealPlanModal.addEventListener('click', (event) => {
+            if (event.target == mealPlanModal) {
+                closeMealPlanModal();
+            }
+        });
+
+        mealPlanForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const dietaryRestrictions = document.getElementById('dietary-restrictions').value;
+            const fitnessGoal = document.getElementById('fitness-goal').value;
+            const cuisinePreference = document.getElementById('cuisine-preference').value;
+
+            // Show loading spinner and disable button
+            generateMealPlanButton.disabled = true;
+            mealPlanSpinner.classList.remove('hidden');
+            mealPlanResult.classList.add('hidden'); // Hide previous result
+
+            const prompt = `Generate a sample one-day meal plan.
+            Dietary Restrictions: ${dietaryRestrictions || 'None'}
+            Fitness Goal: ${fitnessGoal || 'General Health'}
+            Cuisine Preference: ${cuisinePreference || 'Any'}
+
+            Please provide a breakfast, lunch, dinner, and two snack suggestions. Format it clearly with headings for each meal.`;
+
+            let chatHistory = [];
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+
+            const payload = { contents: chatHistory };
+            const apiKey = ""; // If you want to use models other than gemini-2.0-flash or imagen-3.0-generate-002, provide an API key here. Otherwise, leave this as-is.
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    mealPlanContent.textContent = text;
+                    mealPlanResult.classList.remove('hidden');
+                } else {
+                    mealPlanContent.textContent = "Sorry, I couldn't generate a meal plan. Please try again with different preferences.";
+                    mealPlanResult.classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error("Error generating meal plan:", error);
+                mealPlanContent.textContent = "An error occurred while generating the meal plan. Please try again later.";
+                mealPlanResult.classList.remove('hidden');
+                } finally {
+                // Hide loading spinner and enable button
+                generateMealPlanButton.disabled = false;
+                mealPlanSpinner.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
